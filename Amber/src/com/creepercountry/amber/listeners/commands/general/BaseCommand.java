@@ -11,8 +11,6 @@ import com.creepercountry.amber.AmberPlugin;
 import com.creepercountry.amber.Notifier;
 import com.creepercountry.amber.Notifier.NotifierType;
 import com.creepercountry.amber.objects.handler.StorageManager;
-import com.creepercountry.amber.objects.town.Town;
-import com.creepercountry.amber.objects.user.User;
 import com.creepercountry.amber.util.Colors;
 import com.creepercountry.amber.util.StopWatch;
 
@@ -27,8 +25,6 @@ public abstract class BaseCommand
 	protected final AmberPlugin plugin = AmberPlugin.getInstance();
 	protected StopWatch sw = plugin.getStopWatch();
 	protected CommandSender sender;
-	protected User user;
-	protected Town town;
 	protected boolean isPlayer = false;
 	protected List<String> args = new ArrayList<String>();
 	protected String usedCommand;

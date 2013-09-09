@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 
 import com.creepercountry.amber.Notifier;
 import com.creepercountry.amber.Notifier.NotifierType;
+import com.creepercountry.amber.hooks.Vault;
 import com.creepercountry.amber.util.Colors;
 
 import java.util.List;
@@ -39,14 +40,14 @@ public class HelpCommand extends BaseCommand
 			for (BaseCommand cmd : var.toArray(new BaseCommand[var.size()])) {
 				if (cmd.permission(sender) && cmd.name.equalsIgnoreCase(args.get(0)))
 				{
-					Notifier.sendMessage(NotifierType.REGULAR, sender, Colors.White, "---------------------- Town - " + cmd.name);
-					BukkitUtils.sendMessage(sender, Colors.Green, "- " + "/" + usedCommand + " " + cmd.name + Colors.Green + " " + cmd.usage);
+					Notifier.sendMessage(NotifierType.REGULAR, sender, Colors.White + "---------------------- Town - " + cmd.name);
+					Notifier.sendMessage(NotifierType.REGULAR, sender, Colors.Green + "- " + "/" + usedCommand + " " + cmd.name + Colors.Green + " " + cmd.usage);
 					cmd.sender = sender;
 					cmd.moreHelp();
 					return true;
 				}
 			}
-			BukkitUtils.sendMessage(sender, Colors.Red, "No command found by that name");
+			Notifier.sendMessage(NotifierType.REGULAR, sender, Colors.Red + "No command found by that name");
 		}
 		return true;
 	}
@@ -54,14 +55,14 @@ public class HelpCommand extends BaseCommand
 	@Override
 	public void moreHelp()
 	{
-		BukkitUtils.sendMessage(sender, Colors.LightBlue, "Shows all ccTown commands");
-		BukkitUtils.sendMessage(sender, Colors.Red, "Type " + Colors.Gray + "/town help <command>" + Colors.Red + " for help on that command");
+		Notifier.sendMessage(NotifierType.REGULAR, sender, Colors.LightBlue + "Shows all ccTown commands");
+		Notifier.sendMessage(NotifierType.REGULAR, sender, Colors.Red + "Type " + Colors.Gray + "/town help <command>" + Colors.Red + " for help on that command");
 	}
 
 	@Override
 	public boolean permission(CommandSender csender)
 	{
-		return Vault.perms.has(csender, "ct.command.help");
+		return Vault.perms.has(csender, "amber.command.help");
 	}
 
 	@Override

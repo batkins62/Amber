@@ -24,17 +24,6 @@ public class GenCommandExecutor implements CommandExecutor
 		
 		// Register commands
 		commands.add(new HelpCommand());
-		commands.add(new NewWatchedCommand());
-		commands.add(new ServerCommand());
-		commands.add(new ReloadCommand());
-		commands.add(new DonationCommand());
-		commands.add(new DebugModeCommand());
-		commands.add(new StopWatchCommand());
-		commands.add(new DefaultFlyLOC());
-		commands.add(new PvPCommand());
-		commands.add(new DonationSetCommand());
-		commands.add(new TermCommand());
-		commands.add(new RaffleCommand());
 		
 		// log to StopWatch
         sw.setLoad("GenCommandExecutor", System.nanoTime() - start);

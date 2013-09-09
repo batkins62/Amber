@@ -2,10 +2,7 @@ package com.creepercountry.amber;
 
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.logging.Logger;
-
 import com.creepercountry.amber.Notifier.NotifierLevel;
-import com.creepercountry.amber.Notifier.NotifierType;
 import com.creepercountry.amber.api.IAmber;
 import com.creepercountry.amber.hooks.DependancyManager;
 import com.creepercountry.amber.hooks.Essentials;
@@ -14,29 +11,21 @@ import com.creepercountry.amber.hooks.NoCheatPlus;
 import com.creepercountry.amber.hooks.PreciousStones;
 import com.creepercountry.amber.hooks.Vault;
 import com.creepercountry.amber.hooks.WorldGuard;
-import com.creepercountry.amber.listeners.RawEntityListener;
-import com.creepercountry.amber.listeners.RawPlayerListener;
 import com.creepercountry.amber.listeners.commands.general.GenCommandExecutor;
 import com.creepercountry.amber.objects.handler.StorageManager;
-import com.creepercountry.amber.objects.handler.UserHandler;
 import com.creepercountry.amber.objects.town.WorldGuardObject;
 import com.creepercountry.amber.storage.Consumer;
 import com.creepercountry.amber.storage.config.Config;
-import com.creepercountry.amber.util.Colors;
 import com.creepercountry.amber.util.StopWatch;
 import com.creepercountry.amber.util.TickUtils;
 import com.creepercountry.amber.util.TickUtils.TickUnit;
 import com.creepercountry.amber.util.Version;
-import com.creepercountry.amber.util.exception.AmberException;
-import com.sk89q.jchronic.utils.Tick;
+import com.creepercountry.amber.util.exception.NoPluginRegisteredException;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredListener;
-import org.bukkit.plugin.TimedRegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AmberPlugin extends JavaPlugin implements IAmber
@@ -99,17 +88,11 @@ public class AmberPlugin extends JavaPlugin implements IAmber
     /**
      * The listeners
      */
-    private RawPlayerListener playerListener;
-    private RawWorldListener worldListener;
-    private RawBlockListener blockListener;
-    private RawWeatherListener weatherListener;
-    private RawEntityListener entityListener;
+    //private RawPlayerListener playerListener;
     
     /**
      * The Executor
      */
-    private TownCommandExecutor townCommandExecutor;
-    private PortalCommandExecutor portalCommandExecutor;
     private GenCommandExecutor genCommandExecutor;
     
     @Override
@@ -147,8 +130,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		
 		// load the storage
 		sm = new StorageManager();
-		if (sh.loadSettings())
-			Notifier.log(NotifierLevel.NORMAL, "Successfully loaded the Storage Objects");
 
 		// register the listeners & executors
 		try
@@ -160,9 +141,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		{
 			Notifier.logException(e);
 		}
-		
-		// Load and updates
-		new AmberUpdater(this).update();
 
 		// set version, get version, and display
 		AmberInfo.setVersion(this.getDescription().getVersion());
@@ -191,7 +169,7 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		long start = System.nanoTime();
 				
 		// Disable the plugin
-		AmberEngine.ENABLED = false;
+		Engine.ENABLED = false;
 		
 		// logout anyone online. (In case of plugin reloading)
 		for (Player player : getServer().getOnlinePlayers())
@@ -216,9 +194,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		// cancel ALL tasks we created
         getServer().getScheduler().cancelTasks(this);
         
-        // nullify the universe, releasing all of its memory
-        townUniverse = null;
-        
         // unregister our events
         HandlerList.unregisterAll(this);
 		
@@ -230,23 +205,17 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 	@Override
 	public void registerEvents()
 	{
+		/*
     	// Get the current time for StopWatch
     	long start = System.nanoTime();
     			
         // Shared Objects
         playerListener = new RawPlayerListener(this);
-        worldListener = new RawWorldListener(this);
-        blockListener = new RawBlockListener(this);
-        weatherListener = new RawWeatherListener(this);
-        entityListener = new RawEntityListener(this);
         
         // register event listeners
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(playerListener, this);
-        pm.registerEvents(worldListener, this);
-        pm.registerEvents(blockListener, this);
-        pm.registerEvents(weatherListener, this);
-        pm.registerEvents(entityListener, this);
+
         
         // debug what we registered
         for (RegisteredListener listener : HandlerList.getRegisteredListeners(instance))
@@ -255,6 +224,7 @@ public class AmberPlugin extends JavaPlugin implements IAmber
         
         // log to StopWatch
         sw.setLoadNoChirp("registerEvents", (System.nanoTime() - start));
+        */
 	}
 	
 	@Override
@@ -264,17 +234,10 @@ public class AmberPlugin extends JavaPlugin implements IAmber
     	long start = System.nanoTime();
     	
     	// Shared Ojects
-    	townCommandExecutor = new TownCommandExecutor();
-    	portalCommandExecutor = new PortalCommandExecutor();
     	genCommandExecutor = new GenCommandExecutor();
         
         // point commands to executor        
-        getCommand("town").setExecutor(townCommandExecutor);
-        getCommand("portal").setExecutor(portalCommandExecutor);
         getCommand("cc").setExecutor(genCommandExecutor);
-        
-        // debug what we loaded
-        // TODO:
         
         // log to StopWatch
         sw.setLoadNoChirp("registerCommands", (System.nanoTime() - start));
@@ -305,7 +268,8 @@ public class AmberPlugin extends JavaPlugin implements IAmber
         	hook.onEnable(this);
         
         // WorldGuardObject
-        wg = new WorldGuardObject((WorldGuardPlugin) dm.getHook("WorldGuard").getPlugin());
+        try { wg = new WorldGuardObject((WorldGuardPlugin) dm.getHook("WorldGuard").getPlugin());
+		} catch (NoPluginRegisteredException e) {}
         
         // log to StopWatch
         sw.setLoadNoChirp("pluginHooks", (System.nanoTime() - start));
@@ -337,18 +301,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 	public DependancyManager getDependancyManager()
 	{
 		return dm;
-	}
-	
-	@Override
-	public PortalCommandExecutor getPortalCommandExecutor()
-	{
-		return portalCommandExecutor;
-	}
-	
-	@Override
-	public TownCommandExecutor getTownCommandExecutor()
-	{
-		return townCommandExecutor;
 	}
 	
 	@Override

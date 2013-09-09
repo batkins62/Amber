@@ -7,7 +7,6 @@ import com.creepercountry.amber.Engine;
 import com.creepercountry.amber.hooks.DependancyManager;
 import com.creepercountry.amber.listeners.commands.general.GenCommandExecutor;
 import com.creepercountry.amber.objects.handler.StorageManager;
-import com.creepercountry.amber.objects.handler.UserHandler;
 import com.creepercountry.amber.objects.town.WorldGuardObject;
 import com.creepercountry.amber.storage.Consumer;
 import com.creepercountry.amber.storage.config.Config;
@@ -77,16 +76,6 @@ public interface IAmber
 	 * @return the General command executor
 	 */
 	public GenCommandExecutor getGenCommandExecutor();
-	
-	/**
-	 * @return the town command executor
-	 */
-	public TownCommandExecutor getTownCommandExecutor();
-	
-	/**
-	 * @return the main command executor
-	 */
-	public PortalCommandExecutor getPortalCommandExecutor();
 	
 	/**
 	 * @return the PreciousStones dependancy

@@ -12,7 +12,7 @@ public class UserLoader
 {	
 	public static void loadUser(User user)
 	{
-		UserHandler uh = AmberPlugin.getInstance().getUserHandler();
+		UserHandler uh = AmberPlugin.getInstance().getStorageManager().getUserHandler();
 		File file = new File(uh.getUserFilename(user.getName()));
 		YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
 		String w = null;
