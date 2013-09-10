@@ -1,13 +1,9 @@
 package com.creepercountry.amber.storage.config;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.util.Vector;
 
@@ -18,12 +14,11 @@ public final class Config
 	public static String plugin_version, default_portal_world, fly_punish_world;
 	public static int config_version, punish_fly, queueWarningSize, forceToProccessAtLeast;
 	public static long config_token, user_inactive, save_config, decrement_fly_violations, timePerRun;
-	public static List<String> blacklist_commands, pstone_nag_words, town_notifications;
+	public static List<String> blacklist_commands, pstone_nag_words, town_notifications, nofly_worlds;
 	public static Location fly_punish_location, default_portal;
 	public static boolean plugin_running, debug, first_run, vault_depend, worldguard_depend,
 					nocheatplus_depend, essentials_depend, fly_violation_checks, debug_dev;
 	public static double plotcost, raffle_price;
-	public static final Map<String, World> worlds = new HashMap<String, World>();
 	
     private final AmberPlugin plugin;
     private File configFile;
@@ -48,10 +43,6 @@ public final class Config
     	configFile = new File(plugin.getDataFolder(), "config.yml");
         config.options().copyDefaults(true);
         
-        // Load the World objects
-    	for (final World world : Bukkit.getWorlds())
-    		worlds.put(world.getName(), world);
-        
         // Load String variables
         plugin_version = config.getString(ConfigNode.PLUGIN_VERSION.getPath(), "1.1.0");
         // Load int variables
@@ -69,6 +60,7 @@ public final class Config
         blacklist_commands = config.getStringList(ConfigNode.BLACKLIST_WATCHED.getPath());
         pstone_nag_words = config.getStringList(ConfigNode.PSTONE_NAG_TRIGGER_WORDS.getPath());
         town_notifications = config.getStringList(ConfigNode.TOWN_NOTIFICATIONS.getPath());
+        nofly_worlds = config.getStringList(ConfigNode.NOFLY_WORLDS.getPath());
         // Load Vector variables
         fly_punish_location = toLocation(config.getVector(ConfigNode.FLY_PUNISH_LOCATION.getPath(), new Vector(0,64,0)),
         		config.getString(ConfigNode.FLY_PUNISH_LOCATION.getWorldLocationPath(), "world"),
@@ -97,6 +89,6 @@ public final class Config
     
     private Location toLocation(Vector vector, String world, String yaw, String pitch)
     {
-    	return vector.toLocation(worlds.get(world), Float.parseFloat(yaw), Float.parseFloat(pitch));
+    	return vector.toLocation(Bukkit.getWorld(world), Float.parseFloat(yaw), Float.parseFloat(pitch));
     }
 }

@@ -105,6 +105,11 @@ public final class ConfigBuilder
 		newConfig.put(key++, "# How often in seconds violation levels will decrement.");
 		newConfig.put(key++, "decrement-fly-violations: " + formatValue(Config.decrement_fly_violations));
 		newConfig.put(key++, "");
+		newConfig.put(key++, "# A list of worlds immediately deny fly to.");
+		newConfig.put(key++, "no-fly-worlds:");
+		for (String value : Config.nofly_worlds)
+			newConfig.put(key++, "  - " + formatValue(value));
+		newConfig.put(key++, "");
 		newConfig.put(key++, "############################################################");
 		newConfig.put(key++, "# +------------------------------------------------------+ #");
 		newConfig.put(key++, "# |                       Consumer                       | #");

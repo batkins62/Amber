@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import com.creepercountry.amber.AmberPlugin;
 import com.creepercountry.amber.Notifier;
 import com.creepercountry.amber.Notifier.NotifierType;
-import com.creepercountry.amber.objects.handler.StorageManager;
 import com.creepercountry.amber.util.Colors;
 import com.creepercountry.amber.util.StopWatch;
 
@@ -29,7 +28,6 @@ public abstract class BaseCommand
 	protected List<String> args = new ArrayList<String>();
 	protected String usedCommand;
 	protected Player player;
-	protected StorageManager sm = plugin.getStorageManager();
 	// Commands below can be set by each individual command
 	public String name;
 	public int minArgs = -1;

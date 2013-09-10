@@ -6,18 +6,18 @@ import com.creepercountry.amber.AmberPlugin;
 
 public class WorldGuard implements Hook
 {
-    private Plugin pl;
+    public static Plugin pl;
 	
 	@Override
 	public void onEnable(AmberPlugin plugin)
 	{
-		this.pl = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
+		WorldGuard.pl = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 	}
 
 	@Override
 	public void onDisable(AmberPlugin plugin)
 	{
-		this.pl = null;
+		WorldGuard.pl = null;
 	}
 
 	@Override

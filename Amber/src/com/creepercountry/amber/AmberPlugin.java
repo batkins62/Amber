@@ -12,17 +12,12 @@ import com.creepercountry.amber.hooks.PreciousStones;
 import com.creepercountry.amber.hooks.Vault;
 import com.creepercountry.amber.hooks.WorldGuard;
 import com.creepercountry.amber.listeners.commands.general.GenCommandExecutor;
-import com.creepercountry.amber.objects.handler.StorageManager;
-import com.creepercountry.amber.objects.town.WorldGuardObject;
 import com.creepercountry.amber.storage.Consumer;
 import com.creepercountry.amber.storage.config.Config;
 import com.creepercountry.amber.util.StopWatch;
 import com.creepercountry.amber.util.TickUtils;
 import com.creepercountry.amber.util.TickUtils.TickUnit;
 import com.creepercountry.amber.util.Version;
-import com.creepercountry.amber.util.exception.NoPluginRegisteredException;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -76,16 +71,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
     private Engine engine;
     
     /**
-     * the Handler Objects
-     */
-    private StorageManager sm;
-    
-    /**
-     * WorldGuardObject object
-     */
-    private WorldGuardObject wg;
-    
-    /**
      * The listeners
      */
     //private RawPlayerListener playerListener;
@@ -127,9 +112,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		
 		// hook into depends
 		pluginHooks();
-		
-		// load the storage
-		sm = new StorageManager();
 
 		// register the listeners & executors
 		try
@@ -155,7 +137,8 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		// Re login anyone online. (In case of plugin reloading)
 		for (Player player : getServer().getOnlinePlayers())
 		{
-			sm.getUserHandler().onLogin(player);
+			// TODO: run onLogin for every player
+			//sm.getUserHandler().onLogin(player);
 		}
 				
 		// output to StopWatch
@@ -174,7 +157,8 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		// logout anyone online. (In case of plugin reloading)
 		for (Player player : getServer().getOnlinePlayers())
 		{
-			sm.getUserHandler().onLogout(player);
+			// TODO: run onLogout for every player
+			//sm.getUserHandler().onLogout(player);
 		}
 		
 		// unregister hooks
@@ -267,10 +251,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
         for (Hook hook : dm.getRegistered())
         	hook.onEnable(this);
         
-        // WorldGuardObject
-        try { wg = new WorldGuardObject((WorldGuardPlugin) dm.getHook("WorldGuard").getPlugin());
-		} catch (NoPluginRegisteredException e) {}
-        
         // log to StopWatch
         sw.setLoadNoChirp("pluginHooks", (System.nanoTime() - start));
 	}
@@ -315,12 +295,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		return sw;
 	}
 	
-	@Override
-	public StorageManager getStorageManager()
-	{
-		return sm;
-	}
-	
     @Override
     public Engine getEngine()
     {
@@ -343,12 +317,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 	public Config getConf()
 	{
 		return config;
-	}
-	
-	@Override
-	public WorldGuardObject getWorldGuardObject()
-	{
-		return wg;
 	}
 	
 	/**
