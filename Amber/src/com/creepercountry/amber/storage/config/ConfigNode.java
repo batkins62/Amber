@@ -22,6 +22,7 @@ public enum ConfigNode
 	NOCHEATPLUS_DEPEND ("dependencies.optional.nocheatplus"),
 	ESSENTIALS_DEPEND ("dependencies.optional.essentials"),
 	FLY_VIOLATION_CHECKS ("fly-violation-checks"),
+	NOFLY_WORLDS ("no-fly-worlds"),
 	PLOT_COST ("plot.cost"),
 	TOWN_NOTIFICATIONS ("town-notifications"),
 	RAFFLE_PRICE ("raffle-price"),

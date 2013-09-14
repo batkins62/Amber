@@ -6,8 +6,6 @@ import java.util.TimeZone;
 import com.creepercountry.amber.Engine;
 import com.creepercountry.amber.hooks.DependancyManager;
 import com.creepercountry.amber.listeners.commands.general.GenCommandExecutor;
-import com.creepercountry.amber.objects.handler.StorageManager;
-import com.creepercountry.amber.objects.town.WorldGuardObject;
 import com.creepercountry.amber.storage.Consumer;
 import com.creepercountry.amber.storage.config.Config;
 import com.creepercountry.amber.util.StopWatch;
@@ -83,11 +81,6 @@ public interface IAmber
 	public DependancyManager getDependancyManager();
 
 	/**
-	 * @return the StorageManager
-	 */
-	public StorageManager getStorageManager();
-
-	/**
 	 * @return Config object
 	 */
 	public Config getConf();
@@ -96,9 +89,4 @@ public interface IAmber
 	 * @return Consumer object
 	 */
 	public Consumer getConsumer();
-	
-	/**
-	 * @return WorldGuardObject object
-	 */
-	public WorldGuardObject getWorldGuardObject();
 }
