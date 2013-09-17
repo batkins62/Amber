@@ -89,4 +89,9 @@ public interface IAmber
 	 * @return Consumer object
 	 */
 	public Consumer getConsumer();
+	
+	/**
+	 * registers permissions to this plugin
+	 */
+	public void registerPermissions();
 }

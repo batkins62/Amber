@@ -1,13 +1,21 @@
 name: Amber
 version: 1.0.0
 main: com.creepercountry.amber.main.AmberPlugin
-description: 'Just like towny, except works with worldguard, and doesnt have stupid features.'
+description: 'Interactive artificial intelligence bot.'
 author: [stealth62, AksanSai]
 website: 'www.creepercountry.com'
 softdepend:
   - Essentials
   - NoCheatPlus
+  - PreciousStones
 depend:
   - Vault
   - WorldGuard
   - WorldEdit
+commands:
+  amber:
+    description: 'run commands to amber'
+    aliases:
+      - cc
+    permission: amber.command
+    usage: 'Syntax error! Simply type /amber help to get started.'

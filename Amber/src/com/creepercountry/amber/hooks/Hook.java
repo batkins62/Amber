@@ -12,7 +12,7 @@ public interface Hook
 	
 	public int getUniqueID();
 	
-	public String getName();
+	public PluginHook getName();
 	
 	public String toString();
 	

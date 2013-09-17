@@ -27,9 +27,9 @@ public class NoCheatPlus implements Hook
 	}
 
 	@Override
-	public String getName()
+	public PluginHook getName()
 	{
-		return pl.getName();
+		return PluginHook.NOCHEATPLUS;
 	}
 
 	@Override
@@ -42,5 +42,11 @@ public class NoCheatPlus implements Hook
 	public Plugin getPlugin()
 	{
 		return pl;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "NoCheatPlus";
 	}
 }

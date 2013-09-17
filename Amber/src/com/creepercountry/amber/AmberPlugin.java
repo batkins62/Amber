@@ -1,6 +1,9 @@
 package com.creepercountry.amber;
 
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 import com.creepercountry.amber.Notifier.NotifierLevel;
 import com.creepercountry.amber.api.IAmber;
@@ -8,6 +11,7 @@ import com.creepercountry.amber.hooks.DependancyManager;
 import com.creepercountry.amber.hooks.Essentials;
 import com.creepercountry.amber.hooks.Hook;
 import com.creepercountry.amber.hooks.NoCheatPlus;
+import com.creepercountry.amber.hooks.PluginHook;
 import com.creepercountry.amber.hooks.PreciousStones;
 import com.creepercountry.amber.hooks.Vault;
 import com.creepercountry.amber.hooks.WorldGuard;
@@ -20,6 +24,7 @@ import com.creepercountry.amber.util.TickUtils.TickUnit;
 import com.creepercountry.amber.util.Version;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -108,6 +113,7 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		timezone = TimeZone.getTimeZone("America/Phoenix");
 		
 		// Load config
+		getDataFolder().mkdirs();
 		config = new Config(this);
 		
 		// hook into depends
@@ -212,6 +218,12 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 	}
 	
 	@Override
+	public void registerPermissions()
+	{
+		// TODO
+	}
+	
+	@Override
 	public void registerCommands()
 	{
     	// Get the current time for StopWatch
@@ -221,7 +233,7 @@ public class AmberPlugin extends JavaPlugin implements IAmber
     	genCommandExecutor = new GenCommandExecutor();
         
         // point commands to executor        
-        getCommand("cc").setExecutor(genCommandExecutor);
+        getCommand("amber").setExecutor(genCommandExecutor);
         
         // log to StopWatch
         sw.setLoadNoChirp("registerCommands", (System.nanoTime() - start));
@@ -237,15 +249,15 @@ public class AmberPlugin extends JavaPlugin implements IAmber
         dm = new DependancyManager();
         PluginManager pm = getServer().getPluginManager();
         if (pm.isPluginEnabled("NoCheatPlus"))
-        	dm.registerHook("NoCheatPlus", new NoCheatPlus());
+        	dm.registerHook(PluginHook.NOCHEATPLUS);
         if (pm.isPluginEnabled("Essentials"))
-        	dm.registerHook("Essentials", new Essentials());
+        	dm.registerHook(PluginHook.ESSENTIALS);
         if (pm.isPluginEnabled("WorldGuard"))
-        	dm.registerHook("WorldGuard", new WorldGuard());
+        	dm.registerHook(PluginHook.WORLDGUARD);
         if (pm.isPluginEnabled("Vault"))
-        	dm.registerHook("Vault", new Vault());
+        	dm.registerHook(PluginHook.VAULT);
         if (pm.isPluginEnabled("PreciousStones"))
-        	dm.registerHook("PreciousStones", new PreciousStones());
+        	dm.registerHook(PluginHook.PRECIOUSSTONES);
         
         // Enable the dependencies
         for (Hook hook : dm.getRegistered())

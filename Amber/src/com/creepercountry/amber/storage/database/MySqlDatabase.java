@@ -1,10 +1,12 @@
 package com.creepercountry.amber.storage.database;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class MySqlDatabase implements AutoCloseable 
+public class MySqlDatabase implements Closeable 
 {
 	private String HostName;
 	private String UserName;
@@ -55,7 +57,7 @@ public class MySqlDatabase implements AutoCloseable
 	}
 	
 	@Override
-	public void close() throws Exception
+	public void close() throws IOException
 	{
 		// TODO Auto-generated method stub
 		

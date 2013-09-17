@@ -89,9 +89,9 @@ public class Vault implements Hook
 	}
 
 	@Override
-	public String getName()
+	public PluginHook getName()
 	{
-		return pl.getName();
+		return PluginHook.VAULT;
 	}
 
 	@Override
@@ -104,6 +104,12 @@ public class Vault implements Hook
 	public Plugin getPlugin()
 	{
 		return pl;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Vault";
 	}
 	
 	public net.milkbowl.vault.Vault getVault()

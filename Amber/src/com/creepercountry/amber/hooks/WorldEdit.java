@@ -4,20 +4,20 @@ import org.bukkit.plugin.Plugin;
 
 import com.creepercountry.amber.AmberPlugin;
 
-public class WorldGuard implements Hook
+public class WorldEdit implements Hook
 {
     public static Plugin pl;
 	
 	@Override
 	public void onEnable(AmberPlugin plugin)
 	{
-		WorldGuard.pl = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
+		WorldEdit.pl = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
 	}
 
 	@Override
 	public void onDisable(AmberPlugin plugin)
 	{
-		WorldGuard.pl = null;
+		WorldEdit.pl = null;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class WorldGuard implements Hook
 	@Override
 	public PluginHook getName()
 	{
-		return PluginHook.WORLDGUARD;
+		return PluginHook.WORLDEDIT;
 	}
 
 	@Override
@@ -47,6 +47,6 @@ public class WorldGuard implements Hook
 	@Override
 	public String toString()
 	{
-		return "WorldGuard";
+		return "WorldEdit";
 	}
 }

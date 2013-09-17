@@ -27,9 +27,9 @@ public class Essentials implements Hook
 	}
 
 	@Override
-	public String getName()
+	public PluginHook getName()
 	{
-		return pl.getName();
+		return PluginHook.ESSENTIALS;
 	}
 
 	@Override
@@ -42,6 +42,12 @@ public class Essentials implements Hook
 	public Plugin getPlugin()
 	{
 		return pl;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Essentials";
 	}
 	
 	public com.earth2me.essentials.Essentials getEssentials()
