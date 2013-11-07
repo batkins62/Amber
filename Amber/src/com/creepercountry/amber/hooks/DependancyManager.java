@@ -17,28 +17,13 @@ public class DependancyManager
 	/**
 	 * Register an initialized hook object.
 	 *
-	 * @param name
-	 * Name of the hook
 	 * @param hook
 	 * Hook object
-	 * @return the registered hook or null if no hook by the given name was registered
 	 */
-	public Hook registerHook(PluginHook name)
+	public void registerHook(PluginHook name, Hook hook)
 	{
-		if (name.equals(PluginHook.ESSENTIALS))
-			this.hooks.put(name, new Essentials());
-		if (name.equals(PluginHook.NOCHEATPLUS))
-			this.hooks.put(name, new NoCheatPlus());
-		if (name.equals(PluginHook.PRECIOUSSTONES))
-			this.hooks.put(name, new PreciousStones());
-		if (name.equals(PluginHook.VAULT))
-			this.hooks.put(name, new Vault());
-		if (name.equals(PluginHook.WORLDEDIT))
-			this.hooks.put(name, new WorldEdit());
-		if (name.equals(PluginHook.WORLDGUARD))
-			this.hooks.put(name, new WorldGuard());
-		
-		return this.hooks.get(name);
+		if (!checkHook(name))
+			this.hooks.put(name, hook);
 	}
 
 	/**
@@ -46,28 +31,25 @@ public class DependancyManager
 	 *
 	 * @param name
 	 * Hook name to unregister
-	 * @return the unregistered hook or null if no hook by the given name was registered
 	 */
-	public Hook unregisterHook(PluginHook name)
+	public void unregisterHook(PluginHook name)
 	{
-		final Hook ret = this.hooks.get(name);
-		this.hooks.remove(name);
-		return ret;
+		if (!checkHook(name))
+			try { this.hooks.remove(getHook(name)); } catch (NoPluginRegisteredException e) {}
 	}
 	
 	/**
-	 * gets a registered hook by name
+	 * finds a registered hook by name
 	 * 
 	 * @param name
-	 * @return hook
-	 * @throws NotRegisteredException if not registered
+	 * @return true if registered, false if not found, or not registered
 	 */
-	private Hook checkHook(PluginHook name) throws NoPluginRegisteredException
+	private boolean checkHook(PluginHook name)
 	{
 		if (hooks.containsKey(name))
-			return hooks.get(name);
+			return true;
 		else
-			throw new NoPluginRegisteredException("Hook not registered: " + name);
+			return false;
 	}
 	
 	/**
@@ -75,17 +57,14 @@ public class DependancyManager
 	 * 
 	 * @param name
 	 * @return hook
+	 * @throws NoPluginRegisteredException if no plugin is registered.
 	 */
-	public Hook getHook(PluginHook name)
+	public Hook getHook(PluginHook name) throws NoPluginRegisteredException
 	{
-		try
-		{
-			return checkHook(name);
-		}
-		catch (NoPluginRegisteredException npre)
-		{
-			return registerHook(name);
-		}
+		if (!checkHook(name))
+			throw new NoPluginRegisteredException("Hook not registered: " + name);
+		
+		return this.hooks.get(name);
 	}
 	
 	/**

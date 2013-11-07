@@ -1,9 +1,6 @@
 package com.creepercountry.amber;
 
-import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Locale;
-import java.util.Set;
 import java.util.TimeZone;
 import com.creepercountry.amber.Notifier.NotifierLevel;
 import com.creepercountry.amber.api.IAmber;
@@ -24,7 +21,6 @@ import com.creepercountry.amber.util.TickUtils.TickUnit;
 import com.creepercountry.amber.util.Version;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -138,7 +134,8 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 		// Start the engine and consumer
 		Engine.ENABLED = true;
 		consumer = new Consumer(this);
-		Engine.CONSUMER = consumer.runTaskTimerAsynchronously(instance, TickUtils.convert(TickUnit.MINUTE, 2), TickUtils.convert(TickUnit.MINUTE, 2));
+		long tick = TickUtils.convert(TickUnit.MINUTE, 2);
+		Engine.CONSUMER = consumer.runTaskTimerAsynchronously(instance, tick, tick);
 		
 		// Re login anyone online. (In case of plugin reloading)
 		for (Player player : getServer().getOnlinePlayers())
@@ -206,7 +203,6 @@ public class AmberPlugin extends JavaPlugin implements IAmber
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(playerListener, this);
 
-        
         // debug what we registered
         for (RegisteredListener listener : HandlerList.getRegisteredListeners(instance))
         	Notifier.log(NotifierLevel.DEBUG, "Listener: " + listener.getListener().getClass().getName() +
@@ -249,19 +245,22 @@ public class AmberPlugin extends JavaPlugin implements IAmber
         dm = new DependancyManager();
         PluginManager pm = getServer().getPluginManager();
         if (pm.isPluginEnabled("NoCheatPlus"))
-        	dm.registerHook(PluginHook.NOCHEATPLUS);
+        	dm.registerHook(PluginHook.NOCHEATPLUS, new NoCheatPlus());
         if (pm.isPluginEnabled("Essentials"))
-        	dm.registerHook(PluginHook.ESSENTIALS);
+        	dm.registerHook(PluginHook.ESSENTIALS, new Essentials());
         if (pm.isPluginEnabled("WorldGuard"))
-        	dm.registerHook(PluginHook.WORLDGUARD);
+        	dm.registerHook(PluginHook.WORLDGUARD, new WorldGuard());
         if (pm.isPluginEnabled("Vault"))
-        	dm.registerHook(PluginHook.VAULT);
+        	dm.registerHook(PluginHook.VAULT, new Vault());
         if (pm.isPluginEnabled("PreciousStones"))
-        	dm.registerHook(PluginHook.PRECIOUSSTONES);
+        	dm.registerHook(PluginHook.PRECIOUSSTONES, new PreciousStones());
         
         // Enable the dependencies
         for (Hook hook : dm.getRegistered())
+        {
         	hook.onEnable(this);
+        	Notifier.log(NotifierLevel.NORMAL, String.format("Hooked into %s successfully.", hook.getName()));
+        }
         
         // log to StopWatch
         sw.setLoadNoChirp("pluginHooks", (System.nanoTime() - start));
@@ -329,6 +328,12 @@ public class AmberPlugin extends JavaPlugin implements IAmber
 	public Config getConf()
 	{
 		return config;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "The Amber Artificial Intellegence Plugin";
 	}
 	
 	/**
